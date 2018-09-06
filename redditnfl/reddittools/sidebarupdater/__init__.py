@@ -1,0 +1,1 @@
+from .sidebarupdater import main
