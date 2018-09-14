@@ -14,13 +14,15 @@ class RedditTool(praw.Reddit):
         warnings.simplefilter("ignore", ResourceWarning)
         self.log = logging.getLogger(self.__class__.__name__)
         self.parse_args()
-        logging.basicConfig(format='[%(asctime)s] %(name)s (%(filename)s:%(lineno)d) %(levelname)s %(message)s', level=logging.DEBUG)
+        level = logging.DEBUG if self.args.verbose else logging.INFO
+        logging.basicConfig(format='[%(asctime)s] %(name)s (%(filename)s:%(lineno)d) %(levelname)s %(message)s', level=level)
         self.site = self.args.site or site
         super(RedditTool, self).__init__(self.site, *args, **kwargs)
 
     def arg_parser(self):
         self.argparser = argparse.ArgumentParser(prog=basename(sys.argv[0]), description="Reddit client script")
         self.argparser.add_argument('-s', '--site', default=os.getenv('REDDIT_SITE'))
+        self.argparser.add_argument('-v', '--verbose', action='store_true')
         return self.argparser
     
     def parse_args(self):
