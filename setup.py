@@ -9,7 +9,7 @@ import os
 import sys
 from shutil import rmtree
 
-from setuptools import find_packages, setup, Command
+from setuptools import find_namespace_packages, setup, Command
 
 # Package meta-data.
 ORG = 'redditnfl'
@@ -87,7 +87,7 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     url=URL,
-    packages=find_packages(exclude=('tests',)),
+    packages=find_namespace_packages(exclude=('tests*', 'build*', 'dist*')),
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
 
@@ -95,6 +95,7 @@ setup(
         'console_scripts': [
             'reddittoken=redditnfl.reddittools.reddittoken:main',
             'sidebarupdater=redditnfl.reddittools.sidebarupdater:main',
+            'twitterposts=redditnfl.reddittools.twitterposts:main',
             ],
     },
     install_requires=REQUIRED,
