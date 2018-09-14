@@ -21,7 +21,6 @@ class SidebarUpdater(RedditTool):
     def __init__(self, *args, **kwargs):
         self.arg_parser()
         self.argparser.add_argument("-n", "--dry-run", action="store_true", dest="dry_run")
-        self.argparser.add_argument("-v", "--verbose", action="store_true", dest="verbose")
         self.argparser.add_argument("subreddit")
         self.argparser.add_argument("config")
         super(SidebarUpdater, self).__init__(self.PROGRAM, user_agent = self.UA, *args, **kwargs)
