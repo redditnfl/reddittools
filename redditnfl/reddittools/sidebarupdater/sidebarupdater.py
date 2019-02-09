@@ -27,7 +27,7 @@ class SidebarUpdater(RedditTool):
         self.ensure_scopes('read,wikiread,wikiedit')
         self.subreddit = self.subreddit(self.args.subreddit)
         self.cfg = ConfigParser()
-        self.cfg.read(self.args.config)
+        self.cfg.read(self.args.config, 'UTF-8')
         self.log.info('Startup')
 
     def marker_replace(self, marker_start, marker_end, content, subject):
