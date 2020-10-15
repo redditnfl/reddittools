@@ -14,17 +14,18 @@ from setuptools import find_namespace_packages, setup, Command
 # Package meta-data.
 ORG = 'redditnfl'
 NAME = 'reddittools'
-DESCRIPTION = 'NFL tools'
+DESCRIPTION = 'reddit tools'
 URL = 'https://github.com/redditnfl/reddittools'
 EMAIL = 'rasher@rasher.dk'
 AUTHOR = 'Jonas Häggqvist'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'praw>=6.0.0,<7',
+    'praw>=7.0.0,<8',
     'pytz>=2018.5',
     'ago>=0.0.92,<0.1',
     'python-dateutil>=2.7.3,<3',
+    'PyYAML>=5.2,<6',
 ]
 
 # The rest you shouldn't have to touch too much :)
@@ -96,6 +97,7 @@ setup(
             'reddittoken=redditnfl.reddittools.reddittoken:main',
             'sidebarupdater=redditnfl.reddittools.sidebarupdater:main',
             'twitterposts=redditnfl.reddittools.twitterposts:main',
+            'flairtool=redditnfl.reddittools.flairtool:main',
             ],
     },
     install_requires=REQUIRED,
