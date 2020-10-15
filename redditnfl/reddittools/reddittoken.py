@@ -17,12 +17,6 @@ import socket
 import sys
 from urllib.parse import urlparse
 
-ALL_SCOPES = ['creddits', 'edit', 'flair', 'history', 'identity',
-                  'modconfig', 'modcontributors', 'modflair', 'modlog',
-                  'modothers', 'modposts', 'modself', 'modwiki',
-                  'mysubreddits', 'privatemessages', 'read', 'report',
-                  'save', 'submit', 'subscribe', 'vote', 'wikiedit',
-                  'wikiread']
 
 def receive_connection(bindhost='0.0.0.0', listenport=8080):
     """Wait for and then return a connected socket..
@@ -44,9 +38,10 @@ def send_message(client, message):
     client.send('HTTP/1.1 200 OK\r\n\r\n{}'.format(message).encode('utf-8'))
     client.close()
 
-def obtain(reddit, scopes, implicit = False):
+
+def obtain(reddit, scopes, implicit=False):
     if 'all' in scopes:
-        scopes = ALL_SCOPES
+        scopes = reddit.get('/api/v1/scopes').keys()
     state = str(random.randint(0, 65000))
     url = reddit.auth.url(scopes, state, 'permanent', implicit = implicit)
     print('Now open this url in your browser: '+url)
@@ -71,20 +66,22 @@ def obtain(reddit, scopes, implicit = False):
     send_message(client, 'refresh_token = {}'.format(refresh_token))
     return refresh_token
 
-def ensure_scopes(reddit, scopes = None, implicit = False):
+
+def ensure_scopes(reddit, scopes=None, implicit=False):
     if scopes is None and 'scopes' in reddit.config.custom:
         scopes = list(map(lambda s: s.strip().lower(), reddit.config.custom['scopes'].split(',')))
 
     if 'all' in scopes:
-        scopes = ALL_SCOPES
+        scopes = reddit.get('/api/v1/scopes').keys()
 
     if type(scopes) == str:
         scopes = list(map(lambda s: s.strip().lower(), scopes.split(',')))
 
     if reddit.read_only or not reddit.auth.scopes().issuperset(scopes):
-        refresh_token = obtain(reddit, scopes, implicit = False)
+        refresh_token = obtain(reddit, scopes, implicit=implicit)
         print("Insert the following into your praw.ini:\nrefresh_token = {}".format(refresh_token))
         sys.exit(1)
+
 
 def main():
     """Provide the program's entry point when directly executed."""
