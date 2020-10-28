@@ -25,7 +25,7 @@ class SidebarUpdater(RedditTool):
         self.argparser.add_argument("config")
         super(SidebarUpdater, self).__init__(self.PROGRAM, user_agent = self.UA, *args, **kwargs)
         self.ensure_scopes('read,wikiread,wikiedit')
-        self.subreddit = self.subreddit(self.args.subreddit)
+        self._subreddit = self.subreddit(self.args.subreddit)
         self.cfg = ConfigParser()
         self.cfg.read(self.args.config, 'UTF-8')
         self.log.info('Startup')
@@ -41,14 +41,14 @@ class SidebarUpdater(RedditTool):
         self.log.info("Sidebar diff:\n%s", diff)
 
     def get_sidebar(self):
-        w = self.subreddit.wiki[self.WP]
+        w = self._subreddit.wiki[self.WP]
         return w.revision_date, w.content_md
 
     def update_sidebar(self, sidebar, updated_plugins):
         reason = "Automatic update of: %s" % (", ".join(updated_plugins))
         try:
             reason = reason[:self.MAX_EDIT_REASON_LENGTH]
-            r = self.subreddit.wiki[self.WP].edit(sidebar, reason=reason)
+            r = self._subreddit.wiki[self.WP].edit(sidebar, reason=reason)
             self.log.debug("Edit result: %r", r)
         except Exception as e:
             self.log.exception("Error updating sidebar")
